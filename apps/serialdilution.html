@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Serial Dilution Calculator</title>
+<meta charset="utf-8">
+<meta name="author" content="Robby Boney">
+<meta name="start date" content="2016-12-02">
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<style>
+    #result{
+        text-align: center;
+    }
+    #app{
+        display: block;
+        width: 100%;
+    }
+    .param{
+        display: inline-block;
+        vertical-align: top;
+        width: 45%;
+        height: 45%;
+        margin: 0 auto;
+        padding: 2px;
+        overflow: hidden;
+        border: 3px solid #000F00;
+    }
+    .top{
+        display: block;
+        border: 3px solid #000F00;
+        padding: 10px;
+    }
+    h4{
+        margin: 0; 
+    }
+</style>
+</head>
+
+<body>
+<h3>Serial Dilution Calculator</h3>
+Display Info<label class="switch">
+      <input type="checkbox" onchange="showInfo()">
+      <div class="slider"></div>
+</label>
+Notes<label class="switch">
+      <input type="checkbox" onchange="showNotes()">
+      <div class="slider"></div>
+</label>
+<hr>
+<div class="top" id="info" style="display: none" >
+<p>
+    This app is designed to give the serial dilution of a set of concentrations
+    outlined by the user.<br><br>
+    Stock Concentration (SC) = the concentration of the stock solution being diluted from<br>
+    Final Treatment Volume (FTV) = the total volume each treatment will contain<br>
+    Intermediate Stock Volume in Treatment (ISVT) = the volume to be administered to each treatment<br>
+    Intermediate Stock Volume (ISV) = the total volume of each serial dilution<br> 
+    <br><br>
+    To do this calculation by hand use the following protocal:
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+        <mi>∀</mi>
+        <mi>i</mi>
+        <mo> ∈ </mo>
+        <mi>Dilution Concentrations</mi>
+        </mrow>
+    </math>
+    <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+            <mi>x</mi><mo>=</mo>
+            <mfrac>
+                <mrow>
+                    <mi>(FTV)</mi>
+                    <mi>(i)</mi>
+                </mrow>
+                <mrow>
+                    <mi>(ISVT)</mi>
+                </mrow>
+            </mfrac>
+        </mrow>
+        <mrow>
+            <mo>=></mo>
+            <mi>New Stock</mi>
+            <mo>=</mo>
+            <mfrac>
+                <mrow>
+                    <mi>(ISV)</mi>
+                    <mi>(x)</mi>
+                </mrow>
+                <mrow>
+                    <mi>(SC)</mi>
+                </mrow>
+            </mfrac>
+        </mrow>
+        <mrow>
+            <mo>=></mo>
+            <mi>Solvent</mi>
+            <mo>=</mo>
+            <mrow>
+                <mi>(ISV)</mi>
+                <mo>-</mo>
+                <mi>(New Stock)</mi>
+            </mrow>
+        </mrow>
+        <mrow>
+            <mo>=></mo>
+            <mi>SC</mi>
+            <mo>=</mo>
+            <mi>x</mi>
+        </mrow>
+    </math>
+</p>
+<br><br><br>
+<!--
+<table>
+    <td align="right"><img src="icons/ser-info-dilute.png" width=70%></img></td>
+    <td align="left"><img src="icons/ser-info-treat.png" width=70%></img></td>
+</table>
+-->
+</div>
+
+<script>
+var stock_conc = 0;
+var total_vol = 0;
+var vol_per_gr = 0;
+var temp_vol = 0;
+var concL = [0,0,0,0];
+
+function compute(L, tvol, ostock, grvol, tmpvol){
+    ostock *= document.getElementById("sel_stock").value;
+    tvol *= document.getElementById("sel_totvol").value;
+    grvol *= document.getElementById("sel_grpvol").value;
+    tmpvol *= document.getElementById("sel_tmpvol").value;
+    var scale = document.getElementById("sel_conc").value;
+    var optionL = document.getElementById("sel_conc");
+    var unit = optionL.options[optionL.selectedIndex].text[0];
+    var i = 0;
+    var x = 0;
+    var ID = 1;
+    var stock = 0;
+    var solvent = 0;
+    var output = "";
+  output = "<tr><th>ID</th><th> Stock ("+unit+"L) </th><th> Solvent ("+unit+"L)</th><th>Treatment Concentration ("+unit+"M)</th></tr>"; 
+    document.getElementById("result").innerHTML = output ;
+    for (i in concL){
+        x = (tvol * L[i] * scale) / grvol;
+        stock = x * tmpvol / ostock;
+        solvent = tmpvol - stock;
+        ostock = x;
+        output = "<tr><td>" + ID + "</td><td>" + (stock/scale).toFixed(3) + "</td><td>" + (solvent/scale).toFixed(3) + "</td><td>"+L[i]+"</th></tr>"; 
+        document.getElementById("result").innerHTML += output ;
+        ID ++;
+    }
+    show_List(concL);
+}
+
+function dt_totvol(){
+    total_vol = parseFloat( document.getElementById("tvol").value );
+    compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function dt_grpvol(){
+    vol_per_gr = parseFloat( document.getElementById("grpvol").value );
+    compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function dt_stock(){
+    stock_conc = parseFloat( document.getElementById("sconc").value );
+    compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function dt_tmpvol(){
+    temp_vol = parseFloat( document.getElementById("tmpvol").value );
+    compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function updateList(item){
+    concL[parseInt(item.id)] = parseFloat(item.value);
+    concL.sort(function(a, b){return b - a});
+    compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function show_List(L){
+    var output = "";
+    var n = 0;
+    var val = 0; 
+    document.getElementById("conclist").innerHTML = output;
+    document.getElementById("sconc").value = stock_conc; 
+    document.getElementById("tvol").value = total_vol; 
+    document.getElementById("grpvol").value = vol_per_gr; 
+    document.getElementById("tmpvol").value = temp_vol;
+    for (i in L){
+        val = L[n];
+        output = '<td><input type="float" id="'+n+'" value="'+val+'" onchange="updateList(this)" /></td>';
+        document.getElementById("conclist").innerHTML += output;
+        n++;
+    }
+}
+
+function addB(){
+   concL.push(0); 
+   compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function subB(){
+   concL = concL.slice(0,-1); 
+   compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol);
+}
+
+function showInfo(){
+    var x = document.getElementById("info");
+    if (x.style.display == "none"){
+        x.style.display = "block";
+    }
+    else{ x.style.display = "none"; }
+}
+
+function showNotes(){
+    var x = document.getElementById("notes");
+    if (x.style.display == "none"){
+        x.style.display = "block";
+    }
+    else{ x.style.display = "none"; }
+}
+
+</script><br>
+<div id="app">
+    <center>
+    <div class="param">
+        <h3>PARAMETERS</h3>
+        <table>
+            <tr><td>Stock Concentration</td><td> <input type"float" id="sconc" placeholder="input decimal" onchange="dt_stock()"></td>
+                <td>
+                    <select id="sel_stock" onchange="compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol)">
+                        <option value="1e+12">TM</option>
+                        <option value="1e+9">GM</option>
+                        <option value="1e+6">MM</option>
+                        <option value="1e+3">kM</option>
+                        <option value="1">M</option>
+                        <option value="1e-3">mM</option>
+                        <option value="1e-6">µM</option>
+                        <option value="1e-9">nM</option>
+                        <option value="1e-12">pM</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>Treatment Volume</td><td> <input type"float" id="tvol" placeholder="input decimal" onchange="dt_totvol()"></td>
+                <td>
+                    <select id="sel_totvol" onchange="compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol)">
+                        <option value="1e+12">TL</option>
+                        <option value="1e+9">GL</option>
+                        <option value="1e+6">ML</option>
+                        <option value="1e+3">kL</option>
+                        <option value="1">L</option>
+                        <option value="1e-3">mL</option>
+                        <option value="1e-6">µL</option>
+                        <option value="1e-9">nL</option>
+                        <option value="1e-12">pL</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>Intermediate Stock volume in Treatment</td><td> <input type"float" id="grpvol" placeholder="input decimal" onchange="dt_grpvol()"></td>
+                <td>
+                    <select id="sel_grpvol" onchange="compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol)">
+                        <option value="1e+12">TL</option>
+                        <option value="1e+9">GL</option>
+                        <option value="1e+6">ML</option>
+                        <option value="1e+3">kL</option>
+                        <option value="1">L</option>
+                        <option value="1e-3">mL</option>
+                        <option value="1e-6">µL</option>
+                        <option value="1e-9">nL</option>
+                        <option value="1e-12">pL</option>
+                    </select>
+                </td>
+            </tr>
+            <tr><td>Intermediate Stock Volume</td><td> <input type"float" id="tmpvol" placeholder="input decimal" onchange="dt_tmpvol()"></td>
+                <td>
+                    <select id="sel_tmpvol" onchange="compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol)">
+                        <option value="1e+12">TL</option>
+                        <option value="1e+9">GL</option>
+                        <option value="1e+6">ML</option>
+                        <option value="1e+3">kL</option>
+                        <option value="1">L</option>
+                        <option value="1e-3">mL</option>
+                        <option value="1e-6">µL</option>
+                        <option value="1e-9">nL</option>
+                        <option value="1e-12">pL</option>
+                    </select>
+                </td>
+            </tr> 
+        </table><br>
+        <b>Dilution Concentrations</b>
+        <table>
+            <button type="button" id="addB" onclick="addB()">Add Conc </button>
+            <button type="button" id="subB" onclick="subB()">Sub Conc </button>
+            <select id="sel_conc" value="1" onchange="compute(concL, total_vol, stock_conc, vol_per_gr, temp_vol)">
+                    <option value="1e+12">TM</option>
+                    <option value="1e+9">GM</option>
+                    <option value="1e+6">MM</option>
+                    <option value="1e+3">kM</option>
+                    <option value="1">M</option>
+                    <option value="1e-3">mM</option>
+                    <option value="1e-6">µM</option>
+                    <option value="1e-9">nM</option>
+                    <option value="1e-12">pM</option>
+            </select>
+        <br><br>
+        </table>
+        <table id="conclist"></table>
+    </div>
+    <div class="param">
+        <h3>RESULTS</h3>
+        <table id="result" cellpadding="10" border="2" ></table>
+    </div>
+    </center>
+  </div>
+  <div>
+      <br>
+      <hr>
+      <br>
+  </div>
+  <div id="notes" style="display:none">
+    <textarea type="text" text="" placeholder="take notes"/></textarea>
+    <br>
+  </div>
+  <script>
+    function printPage(){
+      window.print();
+    }
+  </script>
+    <button onclick="printPage()">Print this Page</button>
+</body>
+
+</html> 

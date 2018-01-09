@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dose Response Curve</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.min.js"></script>
+    <style>
+      table{
+        border-collapse: collapse;
+        width: 80%;
+      }
+      #constants{
+        background-color: #e6f2ff;
+      }
+      #timepts_options{
+        background-color: #e6f2ff;
+      }
+    </style>
+  </head>
+
+
+  <body>
+  <script>
+    window.onload = function(){
+      tmpt_gen();
+    }
+  </script>
+    <script type="text/javascript" src="drc-math.js"></script>
+
+    <br>
+    <center>
+    Display Info<label class="switch">
+      <input type="checkbox" onchange="showInfo()">
+      <div class="slider"></div>
+    </label>
+    <div class="top" id="info" style="display: none">
+      <table id="constants" border="2px">
+        <tr> 
+          <th>Start (hour:min)</th> 
+          <th>Stagger (min)</th> 
+          <th>Groups (#)</th> 
+          <th>Timepoints (#)</th> 
+        </tr>
+        <tr> 
+          <td><input type="text" id="i_start" style="width:90%" onchange="tmpt_gen();"/></td> 
+          <td><input type="number" id="i_stagger" style="width:90%" onchange="tmpt_gen();"/></td> 
+          <td><input type="number" id="i_treatments" max="50" min="1" value="1" style="width:90%" onchange="tmpt_gen();"/></td> 
+          <td><input type="number" id="i_timepoints" max="10" min="1" value="1" style="width:90%" onchange="tmpt_settings(); tmpt_gen();"/></td> 
+        </tr>
+        <tr>
+          <td><button id="opt_timeType" value="1" class="w3-button" style="width:100%" onclick="opt_timeType(this)">Time (military)</button></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table><br>
+
+      <table id="timepts_options" border="2px"></table><br>
+    </div>
+
+    <br><br>
+    <center><input type="text" id="title" placeholder="title" value="" style="text-align: center; width:98%; font-size:25px;"/></center>
+    <br>
+    <button class="w3-button w3-block w3-teal" onclick="update_times()">Update</button><br><br>
+    <table id="timepts_tbl" border="1px"></table><br>
+    <!--
+    <h2>Results</h2>
+    <br>
+    
+    <div id="data_chart" style="width: 50%;">
+      </canvas><canvas id="myChart"></canvas>
+      <script type="text/javascript" src="drc-chart.js"></script>
+    </div>
+    -->
+    </center>
+    <hr>
+
+    <button onclick="printPage()">Print this page</button>
+
+  </body>
+</html>
+

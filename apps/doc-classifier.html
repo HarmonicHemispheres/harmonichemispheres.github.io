@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Document Classifier</title>
+<meta charset="UTF-8"> 
+<link rel="stylesheet" href="doc-styles.css">
+<link rel="script" href="doc-styles.css">
+<script src="doc-math.js"></script>
+</head>
+
+<body>
+<center><h1>Naive Bayes Document Classifier</h1></center><br>
+<div class="main">
+
+    <div class="block">        
+        <div class="subblock">
+            Label 1: <input id="lab_1" type="text" style="width:30%;"><br><br> 
+            Label 2: <input id="lab_2" type="text" style="width:30%;"><br><br> 
+            Threshold (value >= 1): <input id="thr" type="text" style="width:10%;"><br>
+            Lemmatize: <input id="lemma" type="checkbox">
+            
+            <br><br>
+            <button class="buttons" onclick="train()">Train</button><br><br>    
+        </div>
+        <div class="subblock">
+            Test (string of words):<br><br>
+            <input id="test" type="text" style="width:80%;"><br> 
+            <div style="background: #c6dcff">
+                <h1 id="result"></h1>
+            </div>
+            <button class="buttons" onclick="classify()">Classify</button><br>
+        </div>
+
+        <div class="subblock">
+            <b>Label 1 </b>= the category in question<br>
+            <b>Label 2 </b>= the category to test against<br>
+            <b>Threshold </b>= Higher threshold lowers the bar for test to be classified as label 1<br>
+            <b>Lemmatize </b>= remove small grammer elements like (,.(){}\/ the and or for at it in on ect...) from input strings to increase uniqueness of word vectors.<br>
+        </div>
+    </div>
+
+    <div class="block" style="width:50%;">
+        <center>
+            <button class="buttons" onclick="tr_set_add()">ADD</button>
+            <button class="buttons" onclick="tr_set_del()">DEL</button>
+
+            <br><br>
+            <table id="tr_set" border="2px" width="80%">
+                <tr>
+                    <th>Label</th>
+                    <th>String</th>
+                </tr>
+            </table>    
+        </center>
+    </div>
+</div>
+
+</body>
+</html> 
