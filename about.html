@@ -60,16 +60,26 @@ body {font-family: "Lato", sans-serif}
 </style>
 
 <body class="">
+  <script type="text/javascript" src="code/core_code.js"></script>
 
 <!-- Navbar -->
 <div class="w3-top">
   <div class="w3-bar w3-black w3-card">
+    <a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
     <a href="index.html" class="w3-bar-item w3-button w3-padding-large">Home</a>
     <a href="about.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">About</a>
     <a href="cs.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Computer Science</a>
     <a href="music.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Music</a>
     <a href="graphics.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Graphic Design</a>
   </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-black w3-hide w3-hide-large w3-hide-medium w3-top" style="margin-top:46px">
+  <a href="about.html" class="w3-bar-item w3-button w3-padding-large">About</a>
+  <a href="cs.html" class="w3-bar-item w3-button w3-padding-large">Computer Science</a>
+  <a href="music.html" class="w3-bar-item w3-button w3-padding-large">Music</a>
+  <a href="graphics.html" class="w3-bar-item w3-button w3-padding-large">Graphic Design</a>
 </div>
 
 <!-- main body of content -->
@@ -96,7 +106,7 @@ body {font-family: "Lato", sans-serif}
           <p style="padding-left: 10%; padding-right: 10%">My name is Robby Boney and I try to make the most out of life. I currently pursue an undergradute in computer science at Washington State University. I'm also involved in the <a href="https://labs.wsu.edu/allison-coffin/">Coffin Research Lab</a> studying auditory regeneration using bioinformatics approach to analyze amino acid differences between species that can regenerate hearing and those that cannot. My primary interests lie in data science and regenerative biology. These areas are critical topics to the modern age of technology and I find the study and practice of these skills fascinating. My goal is to invent useful and efficient software and to learn as much as I possibly can throughout life. Aside from work I also write music and do graphic design.</p><br>
           
           <center>
-          <a href="files/robbyboney-resume_CV.pdf" >
+          <a href="files/resume_spring_2018.pdf" >
             <button class="w3-button w3-blue w3-border w3-round-large">Resume/CV</button>
           </a>
           </center>
